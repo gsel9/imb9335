@@ -1,7 +1,3 @@
-# NOTE: Women are nine times more likely than men to develop PBC.
-# REF: https://www.medicinenet.com/primary_biliary_cirrhosis_pbc/article.htm
-# REF: https://www.liver.ca/patients-caregivers/liver-diseases/primary-biliary-cholangitis/
-
 library(survival)
 
 bilcirr = read.table("http://folk.uio.no/borgan/IMB9335/bilcirr.txt", header=T)
@@ -13,21 +9,27 @@ bilcirr$years = bilcirr$days / 365.25
 
 surv.sex = survfit(coxph(Surv(time=years, event=status==1)~strata(sex), data=bilcirr))
 # Plot cumulative hazard.
+pdf("/Users/severinlangberg/Desktop/phd/survival_analysis/exam/figures/nelson_aalen_sex_marginal.pdf")
 plot(
   surv.sex, fun="cumhaz", mark.time=F, col=c("black", "grey"), lwd=2,
-  xlab="Years since treatment", ylab="Cumulative hazard", lty=1:2
+  xlab="Years since treatment", ylab="Cumulative hazard", lty=1:2,
+  cex.lab=1.6, cex.axis=1.6, cex.sub=1.6
 )
-legend("bottomright", c("Females","Males"), lty=1:2, lwd=2, col=c("black", "grey"))
+legend("bottomright", c("Males", "Females"), lty=1:2, lwd=2, col=c("black", "grey"))
+dev.off()
 
 ##### Kaplan-Meier plots #####
 
 fit.sex <- survfit(Surv(time=years, event=status)~strata(sex), data=bilcirr)
 # Plot survival curve.
+pdf("/Users/severinlangberg/Desktop/phd/survival_analysis/exam/figures/kapmaier_sex_marginal.pdf")
 plot(
-  fit.sex, xlab="Years since treatment", ylab="Cumulative hazard",
-  col=c("black", "grey"), lty=1:2, lwd=2, mark.time=FALSE
+  fit.sex, xlab="Years since treatment", ylab="Survival",
+  col=c("black", "grey"), lty=1:2, lwd=2, mark.time=FALSE,
+  cex.lab=1.6, cex.axis=1.6, cex.sub=1.6
 )
-legend("bottomleft", c("Females","Males"), lty=1:2, lwd=2, col=c("black", "grey"))
+legend("bottomleft", c("Males", "Females"), lty=1:2, lwd=2, col=c("black", "grey"))
+dev.off()
 
 summary(fit.sex)
 # Estimates and 95 % confidence intervals for the survival after 5 and 10 years.

@@ -10,22 +10,28 @@ bilcirr$years = bilcirr$days / 365.25
 surv.treat = survfit(coxph(Surv(time=years, event=status==1)~strata(treat), 
                            data=bilcirr))
 # Plot cumulative hazard.
+pdf("/Users/severinlangberg/Desktop/phd/survival_analysis/exam/figures/nelson_aalen_treat_marginal.pdf")
 plot(
   surv.treat, fun="cumhaz", mark.time=F, col=c("black", "grey"), lwd=2,
-  xlab="Years since treatment", ylab="Cumulative hazard", lty=1:2
+  xlab="Years since treatment", ylab="Cumulative hazard", lty=1:2,
+  cex.lab=1.6, cex.axis=1.6, cex.sub=1.6
 )
 legend("bottomright", c("D-penicillamine","Placebo"), lty=1:2, lwd=2, 
        col=c("black", "grey"))
+dev.off()
 
 ##### Kaplan-Meier plots #####
 
 fit.treat <- survfit(Surv(time=years, event=status)~strata(treat), data=bilcirr)
 # Plot survival curve.
+pdf("/Users/severinlangberg/Desktop/phd/survival_analysis/exam/figures/kapmaier_treat_marginal.pdf")
 plot(
-  fit.treat, xlab="Years since treatment", ylab="Cumulative hazard",
-  col=c("black", "grey"), lty=1:2, lwd=2, mark.time=FALSE
+  fit.treat, xlab="Years since treatment", ylab="Survival",
+  col=c("black", "grey"), lty=1:2, lwd=2, mark.time=FALSE,
+  cex.lab=1.6, cex.axis=1.6, cex.sub=1.6
 )
 legend("bottomleft", c("D-penicillamine","Placebo"), lty=1:2, lwd=2, col=c("black", "grey"))
+dev.off()
 
 summary(fit.treat)
 # Estimates and 95 % confidence intervals for the survival after 5 and 10 years.

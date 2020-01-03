@@ -7,25 +7,29 @@ bilcirr$years = bilcirr$days / 365.25
 
 ##### Nelson-Aalen plots #####
 
-# asc: ascites (0=absent, 1=present)
-
 surv.asc = survfit(coxph(Surv(time=years, event=status==1)~strata(asc), data=bilcirr))
 # Plot cumulative hazard.
+pdf("/Users/severinlangberg/Desktop/phd/survival_analysis/exam/figures/nelson_aalen_asc_marginal.pdf")
 plot(
   surv.asc, fun="cumhaz", mark.time=F, col=c("black", "grey"), lwd=2,
-  xlab="Years since treatment", ylab="Cumulative hazard", lty=1:2
+  xlab="Years since treatment", ylab="Cumulative hazard", lty=1:2,
+  cex.lab=1.6, cex.axis=1.6, cex.sub=1.6
 )
-legend("topright", c("Absent","Present"), lty=1:2, lwd=2, col=c("black", "grey"))
+legend("topleft", c("Absent ascites","Present ascites"), lty=1:2, lwd=2, col=c("black", "grey"))
+dev.off()
 
 ##### Kaplan-Meier plots #####
 
 fit.asc <- survfit(Surv(time=years, event=status)~strata(asc), data=bilcirr)
 # Plot survival curve.
+pdf("/Users/severinlangberg/Desktop/phd/survival_analysis/exam/figures/kapmaier_asc_marginal.pdf")
 plot(
-  fit.asc, xlab="Years since treatment", ylab="Cumulative hazard",
-  col=c("black", "grey"), lty=1:2, lwd=2, mark.time=FALSE
+  fit.asc, xlab="Years since treatment", ylab="Survival",
+  col=c("black", "grey"), lty=1:2, lwd=2, mark.time=FALSE,
+  cex.lab=1.6, cex.axis=1.6, cex.sub=1.6
 )
 legend("bottomleft", c("Absent","Present"), lty=1:2, lwd=2, col=c("black", "grey"))
+dev.off()
 
 summary(fit.asc)
 # Estimates and 95 % confidence intervals for the survival after 5 and 10 years.

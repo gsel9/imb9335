@@ -1,7 +1,3 @@
-# NOTE: Primary biliary cholangitis is most likely to occur at age 40 to 60.
-# REF: https://www.medicinenet.com/primary_biliary_cirrhosis_pbc/article.htm
-# REF: https://www.liver.ca/patients-caregivers/liver-diseases/primary-biliary-cholangitis/
-
 library(survival)
 
 bilcirr = read.table("http://folk.uio.no/borgan/IMB9335/bilcirr.txt", header=T)
@@ -10,36 +6,42 @@ bilcirr = read.table("http://folk.uio.no/borgan/IMB9335/bilcirr.txt", header=T)
 bilcirr$years = bilcirr$days / 365.25
 
 # Cutoff: Low and high risk groups.
-bilcirr$agegrp = as.numeric(bilcirr$age > 40 & bilcirr$age < 60)
+bilcirr$agegrp = as.numeric(bilcirr$age > 30 & bilcirr$age < 60)
 
 ##### Nelson-Aalen plots #####
 
 surv.agegrp = survfit(coxph(Surv(time=years, event=status==1)~strata(agegrp), data=bilcirr))
 # Plot cumulative hazard.
+pdf("/Users/severinlangberg/Desktop/phd/survival_analysis/exam/figures/nelson_aalen_agegrp_marginal.pdf")
 plot(
   surv.agegrp, fun="cumhaz", mark.time=F, col=c("black", "grey"), lwd=2,
-  xlab="Years since treatment", ylab="Cumulative hazard", lty=1:2
+  xlab="Years since treatment", ylab="Cumulative hazard", lty=1:2,
+  cex.lab=1.6, cex.axis=1.6, cex.sub=1.6
 )
-legend("topleft", c("Low-risk", "High-risk"), lty=1:2, lwd=2, 
+legend("topleft", c("High-risk", "Low-risk"), lty=1:2, lwd=2, 
        col=c("black", "grey"))
+dev.off()
 
 ##### Kaplan-Meier plots #####
 
 fit.agegrp <- survfit(Surv(time=years, event=status)~strata(agegrp), data=bilcirr)
 # Plot survival curve.
+pdf("/Users/severinlangberg/Desktop/phd/survival_analysis/exam/figures/kapmaier_agegrp_marginal.pdf")
 plot(
-  fit.agegrp, xlab="Years since treatment", ylab="Cumulative hazard",
-  col=c("black", "grey"), lty=1:2, lwd=2, mark.time=FALSE
+  fit.agegrp, xlab="Years since treatment", ylab="Survival",
+  col=c("black", "grey"), lty=1:2, lwd=2, mark.time=FALSE,
+  cex.lab=1.6, cex.axis=1.6, cex.sub=1.6
 )
-legend("bottomleft", c("Low-risk", "High-risk"), lty=1:2, lwd=2, col=c("black", "grey"))
+legend("bottomleft", c("High-risk", "Low-risk"), lty=1:2, lwd=2, col=c("black", "grey"))
+dev.off()
 
 summary(fit.agegrp)
 # Estimates and 95 % confidence intervals for the survival after 5 and 10 years.
-#                time n.risk n.event survival std.err lower 95% CI upper 95% CI           
-# Low-risk (5y):   5.057     49       1    0.662 0.04779        0.575        0.763
+#                   time n.risk n.event survival std.err lower 95% CI upper 95% CI           
+# Low-risk (5y):   5.722     22       1    0.520  0.0686       0.4013        0.673
 # Low-risk (10y):  NA
-# High-risk (5y):  5.002    110       1    0.723 0.03300        0.661        0.790
-# High-risk (10y): 10.300     23       1    0.475 0.05226        0.383        0.590
+# High-risk (5y):  5.002    136       1    0.746 0.02869        0.691        0.804
+# High-risk (10y):  10.300     28       1    0.482 0.04882        0.395        0.588
 
 ##### Median survival time with CI #####
 fit.agegrp
