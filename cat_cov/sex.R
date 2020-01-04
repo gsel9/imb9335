@@ -20,7 +20,7 @@ dev.off()
 
 ##### Kaplan-Meier plots #####
 
-fit.sex <- survfit(Surv(time=years, event=status)~strata(sex), data=bilcirr)
+fit.sex <- survfit(Surv(time=years, event=status==1)~strata(sex), data=bilcirr)
 # Plot survival curve.
 pdf("/Users/severinlangberg/Desktop/phd/survival_analysis/exam/figures/kapmaier_sex_marginal.pdf")
 plot(
@@ -47,7 +47,7 @@ summary(fit.sex)
 ##### Logrank test #####
 
 # H0: the two groups have identical hazard functions. Keep H0 if p > alpha.
-survdiff(Surv(time=years, event=status)~sex, data=bilcirr)
+survdiff(Surv(time=years, event=status==1)~sex, data=bilcirr)
 #         N Observed Expected (O-E)^2/E (O-E)^2/V
 # sex=0 276      103    110.4     0.494      4.27
 # sex=1  36       22     14.6     3.728      4.27

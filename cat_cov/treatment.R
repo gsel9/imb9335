@@ -7,7 +7,7 @@ bilcirr$years = bilcirr$days / 365.25
 
 ##### Nelson-Aalen plots #####
 
-surv.treat = survfit(coxph(Surv(time=years, event=status==1)~strata(treat), 
+surv.treat = survfit(coxph(Surv(time=years, event=status)~strata(treat), 
                            data=bilcirr))
 # Plot cumulative hazard.
 pdf("/Users/severinlangberg/Desktop/phd/survival_analysis/exam/figures/nelson_aalen_treat_marginal.pdf")

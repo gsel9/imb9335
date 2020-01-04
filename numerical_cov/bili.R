@@ -29,7 +29,7 @@ dev.off()
 
 ##### Kaplan-Meier plots #####
 
-fit.bilgrp <- survfit(Surv(time=years, event=status)~strata(bilgrp), data=bilcirr)
+fit.bilgrp <- survfit(Surv(time=years, event=status==1)~strata(bilgrp), data=bilcirr)
 # Plot survival curve.
 pdf("/Users/severinlangberg/Desktop/phd/survival_analysis/exam/figures/kapmaier_biligrp_marginal.pdf")
 plot(
@@ -58,7 +58,7 @@ fit.bilgrp
 ##### Logrank test #####
 
 # H0: the two groups have identical hazard functions. Keep H0 if p > alpha.
-survdiff(Surv(time=years, event=status)~bilgrp, data=bilcirr)
+survdiff(Surv(time=years, event=status==1)~bilgrp, data=bilcirr)
 #           N Observed Expected (O-E)^2/E (O-E)^2/V
 # bilgrp=1 234       67    107.9      15.5       119
 # bilgrp=2  78       58     17.1      97.9       119

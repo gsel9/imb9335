@@ -20,7 +20,7 @@ dev.off()
 
 ##### Kaplan-Meier plots #####
 
-fit.asc <- survfit(Surv(time=years, event=status)~strata(asc), data=bilcirr)
+fit.asc <- survfit(Surv(time=years, event=status==1)~strata(asc), data=bilcirr)
 # Plot survival curve.
 pdf("/Users/severinlangberg/Desktop/phd/survival_analysis/exam/figures/kapmaier_asc_marginal.pdf")
 plot(
@@ -41,13 +41,13 @@ summary(fit.asc)
 
 ##### Median survival time with CI #####
 #                     n events median 0.95LCL 0.95UCL
-# strata(sex)=sex=0 276    103   9.39    8.68      NA
-# strata(sex)=sex=1  36     22   6.53    3.55      NA
+# strata(asc)=asc=0 288    102   9.81   8.986      NA
+# strata(asc)=asc=1  24     23   1.01   0.611    3.26
 
 ##### Logrank test #####
 
 # H0: the two groups have identical hazard functions. Keep H0 if p > alpha.
-survdiff(Surv(time=years, event=status)~asc, data=bilcirr)
+survdiff(Surv(time=years, event=status==1)~asc, data=bilcirr)
 #                 N Observed Expected (O-E)^2/E (O-E)^2/V
 # asc=0 288      102   121.28      3.06       104
 # asc=1  24       23     3.72     99.91       104

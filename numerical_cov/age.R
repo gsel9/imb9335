@@ -18,13 +18,13 @@ plot(
   xlab="Years since treatment", ylab="Cumulative hazard", lty=1:2,
   cex.lab=1.6, cex.axis=1.6, cex.sub=1.6
 )
-legend("topleft", c("High-risk", "Low-risk"), lty=1:2, lwd=2, 
+legend("topleft", c("Low-risk", "High-risk"), lty=1:2, lwd=2, 
        col=c("black", "grey"))
 dev.off()
 
 ##### Kaplan-Meier plots #####
 
-fit.agegrp <- survfit(Surv(time=years, event=status)~strata(agegrp), data=bilcirr)
+fit.agegrp <- survfit(Surv(time=years, event=status==1)~strata(agegrp), data=bilcirr)
 # Plot survival curve.
 pdf("/Users/severinlangberg/Desktop/phd/survival_analysis/exam/figures/kapmaier_agegrp_marginal.pdf")
 plot(
@@ -32,7 +32,7 @@ plot(
   col=c("black", "grey"), lty=1:2, lwd=2, mark.time=FALSE,
   cex.lab=1.6, cex.axis=1.6, cex.sub=1.6
 )
-legend("bottomleft", c("High-risk", "Low-risk"), lty=1:2, lwd=2, col=c("black", "grey"))
+legend("bottomleft", c("Low-risk", "High-risk"), lty=1:2, lwd=2, col=c("black", "grey"))
 dev.off()
 
 summary(fit.agegrp)
@@ -46,13 +46,13 @@ summary(fit.agegrp)
 ##### Median survival time with CI #####
 fit.agegrp
 #                          n events median 0.95LCL 0.95UCL
-# strata(agegrp)=agegrp=0 115     47   8.82    6.95      NA
-# strata(agegrp)=agegrp=1 197     78   9.43    8.68      NA
+# strata(agegrp)=agegrp=0  60     34   6.85    4.07    9.81
+# strata(agegrp)=agegrp=1 252     91   9.43    8.88      NA
 
 ##### Logrank test #####
 
 # H0: the two groups have identical hazard functions. Keep H0 if p > alpha.
-survdiff(Surv(time=years, event=status)~agegrp, data=bilcirr)
+survdiff(Surv(time=years, event=status==1)~agegrp, data=bilcirr)
 #                     N Observed Expected (O-E)^2/E (O-E)^2/V
 # agegrp=0 115       47     41.1     0.835      1.26
 # agegrp=1 197       78     83.9     0.410      1.26
